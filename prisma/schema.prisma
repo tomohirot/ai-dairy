@@ -1,0 +1,104 @@
+// 営業日報システム Prisma Schema
+// ER図（er_diagram.md）に基づいて定義
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 営業マスタ
+model SalesPerson {
+  id        Int      @id @default(autoincrement()) @map("sales_id")
+  name      String   @map("sales_name")
+  nameKana  String   @map("sales_name_kana")
+  email     String   @unique
+  department String?
+  managerId Int?     @map("manager_id")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // リレーション
+  manager       SalesPerson?  @relation("ManagerSubordinate", fields: [managerId], references: [id])
+  subordinates  SalesPerson[] @relation("ManagerSubordinate")
+  dailyReports  DailyReport[]
+  comments      Comment[]
+  customers     Customer[]
+
+  @@map("sales_person")
+}
+
+// 顧客マスタ
+model Customer {
+  id           Int      @id @default(autoincrement()) @map("customer_id")
+  name         String   @map("customer_name")
+  nameKana     String   @map("customer_name_kana")
+  industry     String?
+  address      String?
+  phone        String?
+  salesId      Int      @map("sales_id")
+  isDeleted    Boolean  @default(false) @map("is_deleted")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // リレーション
+  salesPerson   SalesPerson    @relation(fields: [salesId], references: [id])
+  visitRecords  VisitRecord[]
+
+  @@map("customer")
+}
+
+// 日報
+model DailyReport {
+  id         Int      @id @default(autoincrement()) @map("report_id")
+  salesId    Int      @map("sales_id")
+  reportDate DateTime @map("report_date") @db.Date
+  problem    String?  @db.Text
+  plan       String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // リレーション
+  salesPerson   SalesPerson    @relation(fields: [salesId], references: [id])
+  visitRecords  VisitRecord[]
+  comments      Comment[]
+
+  @@unique([salesId, reportDate])
+  @@map("daily_report")
+}
+
+// 訪問記録
+model VisitRecord {
+  id           Int      @id @default(autoincrement()) @map("visit_id")
+  reportId     Int      @map("report_id")
+  customerId   Int      @map("customer_id")
+  visitContent String   @map("visit_content") @db.Text
+  visitOrder   Int      @map("visit_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // リレーション
+  dailyReport DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  customer    Customer    @relation(fields: [customerId], references: [id])
+
+  @@map("visit_record")
+}
+
+// コメント
+model Comment {
+  id             Int      @id @default(autoincrement()) @map("comment_id")
+  reportId       Int      @map("report_id")
+  commenterId    Int      @map("commenter_id")
+  commentContent String   @map("comment_content") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // リレーション
+  dailyReport DailyReport  @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  commenter   SalesPerson  @relation(fields: [commenterId], references: [id])
+
+  @@map("comment")
+}

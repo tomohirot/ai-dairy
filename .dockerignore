@@ -1,0 +1,58 @@
+# dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# testing
+coverage
+.nyc_output
+__tests__
+e2e
+playwright-report
+test-results
+
+# next.js
+.next/
+out/
+
+# production
+build
+dist
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+*.log
+
+# local env files
+.env
+.env*.local
+.env.development
+.env.test
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# git
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+
+# documentation
+*.md
+!README.md
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
