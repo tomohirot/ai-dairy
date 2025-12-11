@@ -72,3 +72,23 @@ export class InvalidTokenError extends Error {
     this.name = 'InvalidTokenError';
   }
 }
+
+/**
+ * 権限不足エラー
+ */
+export class InsufficientPermissionsError extends Error {
+  constructor(message: string = 'Insufficient permissions') {
+    super(message);
+    this.name = 'InsufficientPermissionsError';
+  }
+}
+
+/**
+ * オーナーシップエラー
+ */
+export class OwnershipError extends Error {
+  constructor(message: string = 'You do not have ownership of this resource') {
+    super(message);
+    this.name = 'OwnershipError';
+  }
+}
