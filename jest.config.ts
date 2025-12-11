@@ -22,6 +22,9 @@ const config: Config = {
     '/.next/',
     '/e2e/',
   ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(jose)/)',
+  ],
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',
     'lib/**/*.{js,jsx,ts,tsx}',
