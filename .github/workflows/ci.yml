@@ -29,6 +29,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
       - name: Run ESLint
         run: npm run lint
@@ -51,6 +53,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
       - name: Run tests
         run: npm run test:coverage
@@ -81,6 +85,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
@@ -114,6 +120,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
       - name: Build application
         run: npm run build
